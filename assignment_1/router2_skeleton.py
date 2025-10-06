@@ -106,16 +106,12 @@ def generate_forwarding_table_with_range(table):
 def ip_to_bin(ip):
     # 1. Split the IP into octets.
     ip_octets = ip.strip().split(".")
-    if len(ip_octets) != 4:
-        raise ValueError(f"Invalid IPv4 address: {ip}")
     # 2. Create an empty string to store each binary octet.
     ip_bin_string = ""
     # 3. Traverse the IP, octet by octet,
     for octet in ip_octets:
         # 4. and convert the octet to an int,
         int_octet = int(octet)
-        if int_octet < 0 or int_octet > 255:
-            raise ValueError(f"Invalid IPv4 octet: {octet}")
         # 5. convert the decimal int to binary,
         bin_octet = bin(int_octet)
         # 6. convert the binary to string and remove the "0b" at the beginning of the string,
