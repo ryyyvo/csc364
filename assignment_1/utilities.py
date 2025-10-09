@@ -52,20 +52,42 @@ def find_default_gateway(table):
             # 3. then return the interface of that row.
             return row[3]
 
+# The purpose of this function is to generate a forwarding table that includes the IP range for a given interface.
+# In other words, this table will help the router answer the question:
+# Given this packet's destination IP, which interface (i.e., port) should I send it out on?
+def generate_forwarding_table_with_range(table):
+    # 1. Create an empty list to store the new forwarding table.
+    new_table = []
+    # 2. Traverse the old forwarding table, row by row,
+    for row in table:
+        # 3. and process each network destination other than 0.0.0.0
+        # (0.0.0.0 is only useful for finding the default port).
+        if row[0] != "0.0.0.0":
+            # 4. Store the network destination and netmask.
+            network_dst_string = row[0]
+            netmask_string = row[1]
+            # 5. Convert both strings into their binary representations.
+            network_dst_bin = ip_to_bin(network_dst_string)
+            netmask_int = ip_to_bin(netmask_string)
+            # 6. Find the IP range.
+            ip_range = find_ip_range(network_dst_bin, netmask_int)
+            # 7. Build the new row.
+            new_row = [network_dst_string, netmask_string, ip_range]
+            # 8. Append the new row to new_table.
+            new_table.append(new_row)
+    # 9. Return new_table.
+    return new_table
+
 # The purpose of this function is to convert a string IP to its binary representation.
 def ip_to_bin(ip):
     # 1. Split the IP into octets.
     ip_octets = ip.strip().split(".")
-    if len(ip_octets) != 4:
-        raise ValueError(f"Invalid IPv4 address: {ip}")
     # 2. Create an empty string to store each binary octet.
     ip_bin_string = ""
     # 3. Traverse the IP, octet by octet,
     for octet in ip_octets:
         # 4. and convert the octet to an int,
         int_octet = int(octet)
-        if int_octet < 0 or int_octet > 255:
-            raise ValueError(f"Invalid IPv4 octet: {octet}")
         # 5. convert the decimal int to binary,
         bin_octet = bin(int_octet)
         # 6. convert the binary to string and remove the "0b" at the beginning of the string,
@@ -82,6 +104,9 @@ def ip_to_bin(ip):
     # 10. Return the binary representation of this int.
     return bin(ip_int)
 
+def find_ip_range(network_dst, netmask):
+    ## FILL IN 
+    return
 
 # The purpose of this function is to perform a bitwise NOT on an unsigned integer.
 def bit_not(n, numbits=32):
