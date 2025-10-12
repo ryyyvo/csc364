@@ -72,7 +72,7 @@ def generate_forwarding_table_with_range(table):
             # 6. Find the IP range.
             ip_range = find_ip_range(network_dst_bin, netmask_int)
             # 7. Build the new row.
-            new_row = [network_dst_string, netmask_string, ip_range]
+            new_row = [ip_range, row[3]]
             # 8. Append the new row to new_table.
             new_table.append(new_row)
     # 9. Return new_table.
@@ -104,9 +104,22 @@ def ip_to_bin(ip):
     # 10. Return the binary representation of this int.
     return bin(ip_int)
 
+# The purpose of this function is to find the range of IPs inside a given a destination IP address/subnet mask pair.
 def find_ip_range(network_dst, netmask):
-    ## FILL IN 
-    return
+    # 1. Perform a bitwise AND on the network destination and netmask
+    # to get the minimum IP address in the range.
+    bitwise_and = network_dst & netmask
+    # 2. Perform a bitwise NOT on the netmask
+    # to get the number of total IPs in this range.
+    # Because the built-in bitwise NOT or complement operator (~) works with signed ints,
+    # we need to create our own bitwise NOT operator for our unsigned int (a netmask).
+    complement = bit_not(netmask)
+    min_ip = bitwise_and
+    # 3. Add the total number of IPs to the minimum IP
+    # to get the maximum IP address in the range.
+    max_ip = min_ip + complement
+    # 4. Return a list containing the minimum and maximum IP in the range.
+    return [min_ip, max_ip]
 
 # The purpose of this function is to perform a bitwise NOT on an unsigned integer.
 def bit_not(n, numbits=32):
