@@ -125,6 +125,24 @@ def find_ip_range(network_dst, netmask):
 def bit_not(n, numbits=32):
     return (1 << numbits) - 1 - n
 
+# The purpose of this function is to receive and process an incoming packet.
+def receive_packet(connection, max_buffer_size):
+    # 1. Receive the packet from the socket.
+    received_packet = connection.recv(max_buffer_size)
+    # 2. If the packet size is larger than the max_buffer_size, print a debugging message
+    packet_size = sys.getsizeof(received_packet)
+    if packet_size > max_buffer_size:
+        print("The packet size is greater than expected", packet_size)
+    # 3. Decode the packet and strip any trailing whitespace.
+    decoded_packet = received_packet.decode().strip()
+    # 3. Append the packet to received_by_router_2.txt.
+    print("received packet", decoded_packet)
+    write_to_file("./output/received_by_router_2.txt", decoded_packet)
+    # 4. Split the packet by the delimiter.
+    packet = decoded_packet.split(" ")
+    # 5. Return the list representation of the packet.
+    return packet
+
 # The purpose of this function is to write packets/payload to file.
 def write_to_file(path, packet_to_write, send_to_router=None):
     # 1. Open the output file for appending.
