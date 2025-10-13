@@ -56,11 +56,11 @@ for packet in packets_table:
     # (a) send the new packet to the appropriate port (and append it to sent_by_router_1.txt),
     # (b) append the payload to out_router_1.txt without forwarding because this router is the last hop, or
     # (c) append the new packet to discarded_by_router_1.txt and do not forward the new packet
-    if sending_port == "8002" and ttl > 0:
+    if sending_port == "8002" and new_ttl > 0:
         print("sending packet", new_packet, "to Router 2")
         router2_socket.send(new_packet.encode())
         util.write_to_file("./output/sent_by_router_1.txt", str(new_packet), "2")
-    elif sending_port == "8004" and ttl > 0:
+    elif sending_port == "8004" and new_ttl > 0:
         print("sending packet", new_packet, "to Router 4")
         router4_socket.send(new_packet.encode())
         util.write_to_file("./output/sent_by_router_1.txt", str(new_packet), "4")
