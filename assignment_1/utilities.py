@@ -72,7 +72,7 @@ def generate_forwarding_table_with_range(table):
             # 6. Find the IP range.
             ip_range = find_ip_range(network_dst_bin, netmask_int)
             # 7. Build the new row.
-            new_row = [ip_range, row[3]]
+            new_row = [ip_range[0], ip_range[1], row[3]]
             # 8. Append the new row to new_table.
             new_table.append(new_row)
     # 9. Return new_table.
@@ -100,9 +100,10 @@ def ip_to_bin(ip):
         # 8. Finally, append the octet to ip_bin_string.
         ip_bin_string += bin_octet_string
     # 9. Once the entire string version of the binary IP is created, convert it into an actual binary int.
-    ip_int = int(ip_bin_string, 2)
+    # ip_int = int(ip_bin_string, 2)
     # 10. Return the binary representation of this int.
-    return bin(ip_int)
+    # return bin(ip_int)
+    return int(ip_bin_string, 2)
 
 # The purpose of this function is to find the range of IPs inside a given a destination IP address/subnet mask pair.
 def find_ip_range(network_dst, netmask):
@@ -126,7 +127,7 @@ def bit_not(n, numbits=32):
     return (1 << numbits) - 1 - n
 
 # The purpose of this function is to receive and process an incoming packet.
-def receive_packet(connection, max_buffer_size):
+def receive_packet(connection, max_buffer_size, router_number):
     # 1. Receive the packet from the socket.
     received_packet = connection.recv(max_buffer_size)
     # 2. If the packet size is larger than the max_buffer_size, print a debugging message
@@ -135,9 +136,9 @@ def receive_packet(connection, max_buffer_size):
         print("The packet size is greater than expected", packet_size)
     # 3. Decode the packet and strip any trailing whitespace.
     decoded_packet = received_packet.decode().strip()
-    # 3. Append the packet to received_by_router_2.txt.
+    # 3. Append the packet to received_by_router_number.txt.
     print("received packet", decoded_packet)
-    write_to_file("./output/received_by_router_2.txt", decoded_packet)
+    write_to_file(f"./output/received_by_router_{router_number}.txt", decoded_packet)
     # 4. Split the packet by the delimiter.
     packet = decoded_packet.split(" ")
     # 5. Return the list representation of the packet.
