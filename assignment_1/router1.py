@@ -35,11 +35,10 @@ for packet in packets_table:
 
     # 8. Decrement the TTL by 1 and construct a new packet with the new TTL.
     new_ttl = ttl - 1
-    new_packet = (sourceIP, destinationIP, payload, new_ttl) ###
+    new_packet = f"{sourceIP},{destinationIP},{payload},{new_ttl}"
 
     # 9. Convert the destination IP into an integer for comparison purposes.
-    destinationIP_bin = util.ip_to_bin(destinationIP)
-    destinationIP_int = int(destinationIP_bin, 2)
+    destinationIP_int = util.ip_to_bin(destinationIP)
 
     # 9. Find the appropriate sending port to forward this new packet to.
     for entry in forwarding_table_with_range:

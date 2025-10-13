@@ -60,7 +60,7 @@ def processing_thread(connection, ip, port, forwarding_table_with_range, default
         packet = util.receive_packet(connection, max_buffer_size, "4")
 
         # 4. If the packet is empty (Router 1 has finished sending all packets), break out of the processing loop
-        if not packet:
+        if not packet or packet[0] == "":
             break
 
         # 5. Store the source IP, destination IP, payload, and TTL.
@@ -74,8 +74,7 @@ def processing_thread(connection, ip, port, forwarding_table_with_range, default
         new_packet = f"{sourceIP},{destinationIP},{payload},{new_ttl}"
 
         # 7. Convert the destination IP into an integer for comparison purposes.
-        destinationIP_bin = util.ip_to_bin(destinationIP)
-        destinationIP_int = int(destinationIP_bin, 2)
+        destinationIP_int = util.ip_to_bin(destinationIP)
 
         # 8. Find the appropriate sending port to forward this new packet to.
         sending_port = None
