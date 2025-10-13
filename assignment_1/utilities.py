@@ -130,17 +130,21 @@ def bit_not(n, numbits=32):
 def receive_packet(connection, max_buffer_size, router_number):
     # 1. Receive the packet from the socket.
     received_packet = connection.recv(max_buffer_size)
+    if not received_packet:
+        return []
     # 2. If the packet size is larger than the max_buffer_size, print a debugging message
     packet_size = sys.getsizeof(received_packet)
     if packet_size > max_buffer_size:
         print("The packet size is greater than expected", packet_size)
     # 3. Decode the packet and strip any trailing whitespace.
     decoded_packet = received_packet.decode().strip()
+    if not decoded_packet:
+        return []
     # 3. Append the packet to received_by_router_number.txt.
     print("received packet", decoded_packet)
     write_to_file(f"./output/received_by_router_{router_number}.txt", decoded_packet)
     # 4. Split the packet by the delimiter.
-    packet = decoded_packet.split(" ")
+    packet = decoded_packet.split(",")
     # 5. Return the list representation of the packet.
     return packet
 
