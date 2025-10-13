@@ -76,9 +76,12 @@ def processing_thread(connection, ip, port, forwarding_table_with_range, default
         # 8. Find the appropriate sending port to forward this new packet to.
         sending_port = None
         for row in forwarding_table_with_range:
-            ip_range = row[0]
-            if ip_range[0] <= destinationIP_int <= ip_range[1]:
-                sending_port = row[1]
+            # row = [min_ip, max_ip, interface]
+            min_ip = row[0]
+            max_ip = row[1]
+            interface = row[2]
+            if min_ip <= destinationIP_int <= max_ip:
+                sending_port = interface
                 break
         else:
             sending_port = default_gateway_port
