@@ -1,0 +1,23 @@
+1. Which approach is faster for the CPU-bound task? Why?
+
+Multiprocessing is faster for CPU-bound tasks because it 
+creates separate processes that can run on multiple CPU cores.
+
+2. Which approach is faster for the I/O-bound task? Why?
+
+Threading is faster for I/O-bound tasks because threads 
+can share the same memory space and can context switch 
+more efficiently during I/O waits.
+
+3. How does the Global Interpreter Lock (GIL) in Python impact performance in threads?
+
+The GIL allows only one thread to execute at a time in a 
+single process, which can be a bottleneck for CPU-bound 
+tasks but is less of an issue for I/O-bound tasks.
+
+4. When should threads or processes be preferred?
+
+Threads should be preferred for I/O-bound tasks. 
+Processes should be preferred for CPU-bound tasks that 
+require heavy computation and can benefit from parallel 
+execution on multiple CPU cores.
